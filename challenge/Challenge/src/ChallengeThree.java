@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -8,7 +9,7 @@ interface Formattable {
     String format(String input);
 }
 
-public class ChallengeThree implements Formattable {
+public class ChallengeThree {
     public static List<String> topSalaryReport(List<Employee> employees, int top, Formattable formatter) {
         /**
          * Returns a List<String> storing the names of top highest income with their names formatted by
@@ -35,12 +36,11 @@ public class ChallengeThree implements Formattable {
         // CODE1: Write code to return the described top salary list using Streams, Collectors, and Lambdas
         // HINT: You can use sorted((e1, e2) -> Integer.compare(e2.salary, e1.salary)) in your stream 
         //       pipeline to sort descending by salary
-        
-    	List<Employee> sortedList = employees.stream().sorted((Employee e1, Employee e2) -> Integer.compare(e2.getSalary(), e1.getSalary())).collect(Collectors.toList());
+    	List<Employee> sortedList = employees.stream().sorted((Employee e1, Employee e2) -> Integer.compare(e2.salary, e1.salary)).collect(Collectors.toList());
     	List<String> out = new ArrayList<String>(top);
-        for(int i=0;i<top;i++)
-        { out.add(sortedList.get(i).getName().toUpperCase()); }
-        return out;
+    	for(Employee e : sortedList)
+    	{ if (out.size() < top) out.add(formatter.format(e.name)); }
+    	return out;
         // ====================================
         // Do not change the code after this
     }
@@ -56,35 +56,18 @@ public class ChallengeThree implements Formattable {
         // MARK BOURNE
     }
 
-	@Override
-	public String format(String input) {
-		return null;
-	}
+
 }
 
 class Employee {
     String name;
     int salary;
 
-    public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getSalary() {
-		return salary;
-	}
-
-	public void setSalary(int salary) {
-		this.salary = salary;
-	}
-
 	public Employee(String name, int salary) {
         this.name = name;
         this.salary = salary;
     }
+	
+	
 	
 }
